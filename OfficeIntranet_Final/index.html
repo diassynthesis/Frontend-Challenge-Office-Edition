@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Intranet - Interactive Map</title>
+    <link rel="stylesheet" href="style.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
+    <head>
+        <link rel="stylesheet" href="css/all.min.css">
+    </head>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <!--<img src="https://via.placeholder.com/150x50?text=OfficeFlow+Logo" alt="OfficeFlow Logo" class="company-logo">-->
+            <img src="images/officeflow-logo.png" alt="OfficeFlow Logo" class="company-logo">
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#dashboard-page"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                <li><a href="#resources-section"><i class="fas fa-sitemap"></i> Resources</a></li>
+                <!--<li><a href="#colleagues-section"><i class="fas fa-users"></i> Directory</a></li>-->
+                <li><a href="#colleagues-page"><i class="fas fa-users"></i> Directory</a></li>
+                <li><a href="#announcements-section"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                <li><a href="#calendar-page"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            </ul>
+        </nav>
+        <div class="user-dropdown-container">
+                <span id="userNameDisplay">Hi, Alice!</span> <i class="fas fa-caret-down dropdown-arrow"></i> <select id="userSelect" class="user-select-dropdown">
+                    <option value="Alice">Alice</option>
+                    <option value="Bob">Bob</option>
+                    <option value="Carol">Carol</option>
+                    <option value="David">david</option>
+                    <option value="Eve">Eve</option>
+                </select>
+            </div>
+    </header>
+
+    <main class="main-content-wrapper">
+        <section id="map-view" class="map-container">
+            <h2>Interactive Office Map</h2>
+            <div class="office-map-placeholder">
+                <div class="room hallway">Main Hallway</div>
+                <div class="room office-a">Office A</div>
+                <div class="room meeting-rooms-zone">Meeting Rooms</div>
+                <div class="room kitchen">Kitchen</div>
+                <div class="room office-b">Office B</div>
+                <div class="room reception">Reception</div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <h3>Resources & Tools</h3>
+            <div class="search-bar">
+                <input type="text" id="resourceSearch" placeholder="Search resources or colleagues...">
+                <i class="fas fa-times clear-search" style="display: none;"></i>
+                <button><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="collapsible-section" id="resources-section">
+                <div class="collapsible-header">
+                    <h4>All Resources:</h4>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="collapsible-content"> <div class="collapsible-sub-section">
+                        <div class="collapsible-header">
+                            <h4>Available Meeting Rooms:</h4>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="collapsible-content"> <ul>
+                                <li data-room-id="conf-a" class="available">Conference Room A (Available)</li>
+                                <li data-room-id="huddle-3" class="booked">Huddle Room 3 (Booked until 3 PM)</li>
+                                <li data-room-id="quiet-booth" class="available">Quiet Booth (Available)</li>
+                                <li data-room-id="media-lab" class="available">Media Lab (Available)</li>
+                                <li data-room-id="office-a" class="available">Office A (Available)</li>
+                                <li data-room-id="office-b" class="available">Office B (Available)</li>
+                                <li data-room-id="kitchen" class="available">Office Kitchen (Open)</li>
+                                <li data-room-id="reception" class="available">Reception Area (Open)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="collapsible-sub-section">
+                        <div class="collapsible-header">
+                            <h4>Office Equipments:</h4>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="collapsible-content"> 
+                            <ul id="officeEquipmentsList"> </ul>
+                        </div>
+                    </div>
+                    <div class="collapsible-sub-section" id="colleagues-section">
+                        <div class="collapsible-header">
+                            <h4>Colleagues:</h4>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="collapsible-content"> <ul>
+                                <li>Alice Johnson - Marketing</li>
+                                <li>Bob Williams - Sales</li>
+                                <li>Carol Davis - HR</li>
+                                <li>David Lee - Engineering</li>
+                                <li>Eve Green - Design</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible-section" id="announcements-section">
+                <div class="collapsible-header">
+                    <h4>Latest Announcements:</h4>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="collapsible-content"> <ul>
+                        <li><a href="#">Company Picnic on July 20th!</a> - <small>July 5, 2025</small></li>
+                        <li><a href="#">New Policy: Remote Work Guidelines</a> - <small>July 1, 2025</small></li>
+                        <li><a href="#">IT System Maintenance Tonight</a> - <small>June 28, 2025</small></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible-section" id="quick-links-section">
+                <div class="collapsible-header">
+                    <h4>Quick Links:</h4>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="collapsible-content"> <ul>
+                        <li><a href="#"><i class="fas fa-file-invoice"></i> HR Portal</a></li>
+                        <li><a href="#"><i class="fas fa-headset"></i> IT Helpdesk</li>
+                        <li><a href="#calendar-page" id="quickLinksCalendar"><i class="fas fa-calendar-alt"></i> Company Calendar</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Employee Handbook</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="details-panel" style="display: none;">
+                <h4 id="details-panel-title"></h4>
+                <ul id="details-list">
+                    </ul>
+                <button id="actionBtn" style="display: none;">Book Room / View Details</button>
+            </div>
+
+        </aside>
+    </main>
+
+    <section id="dashboard-page" class="content-page" style="display: none;">
+        <div class="page-header">
+            <h2>Welcome to Your Dashboard!</h2>
+        </div>
+        <div class="page-content">
+            <div class="dashboard-widget-grid">
+                <div class="dashboard-widget">
+                    <h3><i class="fas fa-calendar-alt"></i> Upcoming Meetings</h3>
+                    <ul id="upcomingMeetingsList"> </ul>
+                </div>
+                <div class="dashboard-widget">
+                    <h3><i class="fas fa-bullhorn"></i> Latest Company News</h3>
+                    <ul>
+                        <li>New HR Policy released - Read more!</li>
+                        <li>Annual Holiday Party announced!</li>
+                        <li>IT Maintenance tonight at 10 PM.</li>
+                    </ul>
+                </div>
+                <div class="dashboard-widget">
+                    <h3><i class="fas fa-tasks"></i> My Tasks</h3>
+                    <ul>
+                        <li>Review Q3 Budget Proposal</li>
+                        <li>Submit Travel Expenses</li>
+                        <li>Follow up on Client A</li>
+                    </ul>
+                </div>
+                <div class="dashboard-widget">
+                    <h3><i class="fas fa-chart-line"></i> Quick Stats</h3>
+                    <p>Open Bookings Today: <strong id="openBookingsToday">0</strong></p> <p>Available Rooms: <strong id="availableRoomsCount">0</strong></p> <p>Total Colleagues: <strong id="totalColleaguesCount">0</strong></p> </div>
+            </div>
+            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the office map view.</a></p>
+        </div>
+    </section>
+
+    <section id="calendar-page" class="content-page" style="display: none;">
+        <div class="page-header">
+            <h2>Company Calendar</h2>
+        </div>
+        <div class="page-content">
+            <div id="calendar-display">
+                <div class="calendar-header-controls">
+                    <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="currentMonthYear"></h3>
+                    <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-weekdays">
+                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                </div>
+                <div id="calendar-grid">
+                </div>
+            </div>
+            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the Office Map View.</a></p>
+            
+        </div>
+    </section>
+    
+    <section id="colleagues-page" class="content-page" style="display: none;">
+        <div class="page-header">
+            <h2>Colleagues Directory</h2>
+        </div>
+        <div class="page-content">
+            <div class="colleagues-grid">
+                <div class="colleague-card">
+                    <h3>Alice Johnson</h3>
+                    <p><strong>Department:</strong> Marketing</p>
+                    <p><strong>Extension:</strong> x7890</p>
+                    <p><strong>Email:</strong> alice.j@my-office.com</p>
+                </div>
+                <div class="colleague-card">
+                    <h3>Bob Williams</h3>
+                    <p><strong>Department:</strong> Sales</p>
+                    <p><strong>Extension:</strong> x7891</p>
+                    <p><strong>Email:</strong> bob.w@my-office.com</p>
+                </div>
+                <div class="colleague-card">
+                    <h3>Carol Davis</h3>
+                    <p><strong>Department:</strong> HR</p>
+                    <p><strong>Extension:</strong> x7892</p>
+                    <p><strong>Email:</strong> carol.d@my-office.com</p>
+                </div>
+                <div class="colleague-card">
+                    <h3>David Lee</h3>
+                    <p><strong>Department:</strong> Engineering</p>
+                    <p><strong>Extension:</strong> x7893</p>
+                    <p><strong>Email:</strong> david.l@my-office.com</p>
+                </div>
+                <div class="colleague-card">
+                    <h3>Eve Green</h3>
+                    <p><strong>Department:</strong> Design</p>
+                    <p><strong>Extension:</strong> x7894</p>
+                    <p><strong>Email:</strong> eve.g@my-office.com</p>
+                </div>
+            </div>
+            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the Office Map View.</a></p>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-sections">
+            <div class="footer-section">
+                <h4>About OfficeFlow</h4>
+                <p>Your central hub for seamless office collaboration and resource management.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: <a href="mailto:info@my-office.com">info@my-office.com</a></p>
+                <p>Phone: +1 (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 my Office Intranet. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
