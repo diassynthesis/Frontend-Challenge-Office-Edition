@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Office Intranet - Interactive Map</title>
     <link rel="stylesheet" href="style.css">
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
-    <head>
-        <link rel="stylesheet" href="css/all.min.css">
-    </head>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->    
+    <link rel="stylesheet" href="css/all.min.css">
+    <meta name="description" content="OfficeFlow: A modern intranet for office management with an interactive map, room booking, and resources.">
 </head>
 <body>
 
     <header class="main-header">
         <div class="logo">
-            <!--<img src="https://via.placeholder.com/150x50?text=OfficeFlow+Logo" alt="OfficeFlow Logo" class="company-logo">-->
-            <img src="images/officeflow-logo.png" alt="OfficeFlow Logo" class="company-logo">
+            <!--<img src="https://via.placeholder.com/150x50?text=Office+Logo" alt="Office Logo" class="company-logo">-->
+            <img src="images/office.png" alt="Office Logo" class="company-logo">
         </div>
         <nav class="main-nav">
             <ul>
@@ -28,6 +27,7 @@
             </ul>
         </nav>
         <div class="user-dropdown-container">
+                <img src="images/user-profile.png" alt="User Profile" class="profile-pic">
                 <span id="userNameDisplay">Hi, Alice!</span> <i class="fas fa-caret-down dropdown-arrow"></i> <select id="userSelect" class="user-select-dropdown">
                     <option value="Alice">Alice</option>
                     <option value="Bob">Bob</option>
@@ -38,8 +38,8 @@
             </div>
     </header>
 
-    <main class="main-content-wrapper">
-        <section id="map-view" class="map-container">
+    <main class="main-content-wrapper" role="main" aria-label="Interactive Office Map">
+        <section id="map-view" class="map-container" aria-label="Interactive office map">
             <h2>Interactive Office Map</h2>
             <div class="office-map-placeholder">
                 <div class="room hallway">Main Hallway</div>
@@ -51,10 +51,10 @@
             </div>
         </section>
 
-        <aside class="sidebar">
+        <aside class="sidebar" role="complementary" aria-label="Resources and tools">
             <h3>Resources & Tools</h3>
             <div class="search-bar">
-                <input type="text" id="resourceSearch" placeholder="Search resources or colleagues...">
+                <input type="text" id="resourceSearch" placeholder="Search resources or colleagues..." aria-label="Search office resources and colleagues">
                 <i class="fas fa-times clear-search" style="display: none;"></i>
                 <button><i class="fas fa-search"></i></button>
             </div>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="collapsible-content"> <ul>
                                 <li data-room-id="conf-a" class="available">Conference Room A (Available)</li>
-                                <li data-room-id="huddle-3" class="booked">Huddle Room 3 (Booked until 3 PM)</li>
+                                <li data-room-id="huddle-3" class="Locked">Huddle Room 3 (Locked until 3 PM)</li>
                                 <li data-room-id="quiet-booth" class="available">Quiet Booth (Available)</li>
                                 <li data-room-id="media-lab" class="available">Media Lab (Available)</li>
                                 <li data-room-id="office-a" class="available">Office A (Available)</li>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="collapsible-content"> <ul>
                         <li><a href="#"><i class="fas fa-file-invoice"></i> HR Portal</a></li>
-                        <li><a href="#"><i class="fas fa-headset"></i> IT Helpdesk</li>
+                        <li><a href="#"><i class="fas fa-headset"></i> IT Helpdesk</a></li>
                         <li><a href="#calendar-page" id="quickLinksCalendar"><i class="fas fa-calendar-alt"></i> Company Calendar</a></li>
                         <li><a href="#"><i class="fas fa-book"></i> Employee Handbook</a></li>
                     </ul>
@@ -149,6 +149,26 @@
             <h2>Welcome to Your Dashboard!</h2>
         </div>
         <div class="page-content">
+        
+            <div class="ticker">
+                <span class="ticker-text">Team meeting at 2 PM | New HR policy update! | Company Picnic on July 20th!</span>
+            </div>
+        
+            <div class="dashboard-section-header">
+                <h3><i class="fas fa-star"></i> Employee Recognition Board</h3>
+            </div>
+            <div class="sticky multiples">
+                <div class="sticky-note">
+                    <p>Team lunch tomorrow at 1 PM!</p>
+                </div>
+                <div class="sticky-note">
+                    <p>Employee of the Month: Alice Johnson!</p>
+                </div>
+                <div class="sticky-note">
+                    <p>Water Cooler: Share your ideas!</p>
+                </div>
+            </div>
+            
             <div class="dashboard-widget-grid">
                 <div class="dashboard-widget">
                     <h3><i class="fas fa-calendar-alt"></i> Upcoming Meetings</h3>
@@ -174,7 +194,7 @@
                     <h3><i class="fas fa-chart-line"></i> Quick Stats</h3>
                     <p>Open Bookings Today: <strong id="openBookingsToday">0</strong></p> <p>Available Rooms: <strong id="availableRoomsCount">0</strong></p> <p>Total Colleagues: <strong id="totalColleaguesCount">0</strong></p> </div>
             </div>
-            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the office map view.</a></p>
+            <p><a href="#map-view" class="return-to-map-btn">For the "Interactive Office Map" CLICK on this button to return to the Office Map View.</a></p>
         </div>
     </section>
 
@@ -195,7 +215,7 @@
                 <div id="calendar-grid">
                 </div>
             </div>
-            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the Office Map View.</a></p>
+            <p><a href="#map-view" class="return-to-map-btn">For the "Interactive Office Map" CLICK on this button to return to the Office Map View.</a></p>
             
         </div>
     </section>
@@ -210,41 +230,41 @@
                     <h3>Alice Johnson</h3>
                     <p><strong>Department:</strong> Marketing</p>
                     <p><strong>Extension:</strong> x7890</p>
-                    <p><strong>Email:</strong> alice.j@my-office.com</p>
+                    <p><strong>Email:</strong> alice.j@synthesys-office.com</p>
                 </div>
                 <div class="colleague-card">
                     <h3>Bob Williams</h3>
                     <p><strong>Department:</strong> Sales</p>
                     <p><strong>Extension:</strong> x7891</p>
-                    <p><strong>Email:</strong> bob.w@my-office.com</p>
+                    <p><strong>Email:</strong> bob.w@synthesys-office.com</p>
                 </div>
                 <div class="colleague-card">
                     <h3>Carol Davis</h3>
                     <p><strong>Department:</strong> HR</p>
                     <p><strong>Extension:</strong> x7892</p>
-                    <p><strong>Email:</strong> carol.d@my-office.com</p>
+                    <p><strong>Email:</strong> carol.d@synthesys-office.com</p>
                 </div>
                 <div class="colleague-card">
                     <h3>David Lee</h3>
                     <p><strong>Department:</strong> Engineering</p>
                     <p><strong>Extension:</strong> x7893</p>
-                    <p><strong>Email:</strong> david.l@my-office.com</p>
+                    <p><strong>Email:</strong> david.l@synthesys-office.com</p>
                 </div>
                 <div class="colleague-card">
                     <h3>Eve Green</h3>
                     <p><strong>Department:</strong> Design</p>
                     <p><strong>Extension:</strong> x7894</p>
-                    <p><strong>Email:</strong> eve.g@my-office.com</p>
+                    <p><strong>Email:</strong> eve.g@synthesys-office.com</p>
                 </div>
             </div>
-            <p><a href="#map-view" class="return-to-map-btn">"For the Interactive Office Map CLICK" on this button to return to the Office Map View.</a></p>
+            <p><a href="#map-view" class="return-to-map-btn">For the "Interactive Office Map" CLICK on this button to return to the Office Map View.</a></p>
         </div>
     </section>
 
     <footer class="main-footer">
         <div class="footer-sections">
             <div class="footer-section">
-                <h4>About OfficeFlow</h4>
+                <h4>About SYNTHESYS Office</h4>
                 <p>Your central hub for seamless office collaboration and resource management.</p>
             </div>
             <div class="footer-section">
@@ -257,12 +277,12 @@
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>
-                <p>Email: <a href="mailto:info@my-office.com">info@my-office.com</a></p>
+                <p>Email: <a href="mailto:info@synthesys-office.com">info@synthesys-office.com</a></p>
                 <p>Phone: +1 (123) 456-7890</p>
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 my Office Intranet. All rights reserved.</p>
+            <p>&copy; 2025 Synthesys Office Intranet. All rights reserved.</p>
         </div>
     </footer>
 

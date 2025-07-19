@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'Meeting Rooms', type: 'zone',
             subRooms: {
                 'conf-a': { name: 'Conference Room A', status: 'Available', capacity: '8 people', features: 'Projector, Whiteboard' },
-                'huddle-3': { name: 'Huddle Room 3', status: 'locked', capacity: '4 people', features: 'Monitor, Privacy Door' },
+                'huddle-3': { name: 'Huddle Room 3', status: 'Locked', capacity: '4 people', features: 'Monitor, Privacy Door' },
                 'quiet-booth': { name: 'Quiet Booth', status: 'Available', capacity: '1 person', features: 'Soundproofing, Outlet' },
                 'media-lab': { name: 'Media Lab', status: 'Available', capacity: '3 people', features: 'Green Screen, Microphones, Camera' }
             }
@@ -172,6 +172,39 @@ document.addEventListener('DOMContentLoaded', () => {
         
     };
     
+    // GOLDEN RULE: NEW: Debounce helper function for performance optimization
+    /**
+     * Creates a debounced version of a function that delays execution until after a specified wait time.
+     * @param {function} func - The function to debounce.
+     * @param {number} wait - The number of milliseconds to wait before executing the function.
+     * @returns {function} A debounced version of the function.
+     */
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    // --- END NEW HELPER FUNCTION: debounce ---
+    
+    /**
+     * Displays a temporary on-screen notification.
+     * @param {string} message - The message to display.
+     * @param {string} type - The type of notification ('success' or 'error').
+     */
+    const showNotification = (message, type = 'success') => {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+    };
+    
     // GOLDEN RULE: NEW: Function to update the displayed user name (made more robust)
     const updateUserNameDisplay = () => {
         // Ensure userNameDisplay element is found before trying to access its textContent
@@ -215,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Control action button display and text based on room status
-        if (data.status === 'Available') {
+        /*if (data.status === 'Available') {
             actionBtn.textContent = `Book ${data.name}`;
             actionBtn.setAttribute('data-room-id', id); // Store room ID on button
             actionBtn.style.display = 'block'; // Make button visible
@@ -227,6 +260,22 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`[ActionBtn] For ${data.name} set to display:block and text: Release.`);
         } else {
             actionBtn.style.display = 'none'; // Hide button for 'Open' or 'N/A' statuses
+            console.log(`[ActionBtn] For ${data.name} set to display:none.`);
+        }*/
+        
+        const lowerCaseStatus = data.status.toLowerCase(); // Convert status to lowercase for robust comparison
+        if (lowerCaseStatus === 'available') {
+            actionBtn.textContent = `Book ${data.name}`;
+            actionBtn.setAttribute('data-room-id', id);
+            actionBtn.style.display = 'block';
+            console.log(`[ActionBtn] For ${data.name} set to display:block and text: Book.`);
+        } else if (lowerCaseStatus === 'booked' || lowerCaseStatus === 'occupied' || lowerCaseStatus === 'locked') { // Now correctly matches 'locked' (lowercase)
+            actionBtn.textContent = `Release ${data.name}`;
+            actionBtn.setAttribute('data-room-id', id);
+            actionBtn.style.display = 'block';
+            console.log(`[ActionBtn] For ${data.name} set to display:block and text: Release.`);
+        } else { // For any other status where booking/releasing isn't applicable (e.g., 'open', 'n/a')
+            actionBtn.style.display = 'none';
             console.log(`[ActionBtn] For ${data.name} set to display:none.`);
         }
         console.log("[Details Panel] Details display complete.");
@@ -288,6 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         liElement.classList.add(roomData.status.toLowerCase()); // Add class matching status (e.g., 'booked', 'available', 'locked')
 
         // Set clickability and cursor based on status
+        /*
         if (roomData.status === 'Available' || roomData.status === 'Locked' || roomData.status === 'Open') { // Make available, locked, open items clickable
             liElement.style.cursor = 'pointer';
             liElement.style.pointerEvents = 'auto'; // Ensure clickable
@@ -302,8 +352,44 @@ document.addEventListener('DOMContentLoaded', () => {
             liElement.style.cursor = 'not-allowed';
             liElement.style.pointerEvents = 'none'; // Make unclickable
             liElement.onclick = null; // Remove click handler
+            console.log(`[updateSidebarListItemStatus] ${roomData.name} (${roomData.status}) is set to NOT CLICKABLE.`); // NEW LOG
         }
     };
+    */
+    
+    // GOLDEN RULE: Set clickability and cursor based on status (Revised to allow clicking Booked/Occupied/Locked/Available/Open to release)
+        const lowerCaseStatus = roomData.status.toLowerCase(); // Get lowercase status for robust comparison
+        if (lowerCaseStatus === 'available' || lowerCaseStatus === 'locked' || lowerCaseStatus === 'open' || lowerCaseStatus === 'booked' || lowerCaseStatus === 'occupied') { 
+            liElement.style.cursor = 'pointer';
+            liElement.style.pointerEvents = 'auto'; // Ensure clicks are not blocked by any other CSS
+            /*liElement.onclick = (event) => { // Use onclick to safely replace any prior handler (prevents duplicate listeners)
+                event.stopPropagation();
+                console.log(`[Sidebar List Click] Clicked: ${roomData.name} (ID: ${roomId}) with status ${roomData.status}.`);
+                displayIndividualRoomDetails(roomId, roomData);
+                detailsPanel.style.display = 'block';
+            };*/
+            
+            // Only (re)attach click handler if it's not already attached or if it needs to be updated.
+            // Using removeEventListener and addEventListener is robust.
+            liElement.removeEventListener('click', liElement._currentClickHandler); // Remove previous handler if any
+            liElement._currentClickHandler = (event) => { // Store handler for easy removal
+                event.stopPropagation(); // Prevent propagation to parent elements
+                console.log(`[Sidebar List Click] Clicked: ${roomData.name} (ID: ${roomId}) with status ${roomData.status}.`);
+                displayIndividualRoomDetails(roomId, roomData); // Show individual details for this room
+                detailsPanel.style.display = 'block'; // Ensure details panel is visible
+            };
+            liElement.addEventListener('click', liElement._currentClickHandler); // Attach new handler
+            console.log(`[updateSidebarListItemStatus] ${roomData.name} (${roomData.status}) is set to CLICKABLE.`);
+        } else { // Truly unclickable statuses (if any, will now be very rare)
+            liElement.style.cursor = 'not-allowed';
+            liElement.style.pointerEvents = 'none';
+            liElement.removeEventListener('click', liElement._currentClickHandler); // Remove any handler
+            liElement._currentClickHandler = null; // Clear stored handler
+            liElement.onclick = null;
+            console.log(`[updateSidebarListItemStatus] ${roomData.name} (${roomData.status}) is set to NOT CLICKABLE.`);
+        }
+    };
+    
     // --- END NEW HELPER FUNCTION: updateSidebarListItemStatus ---
 
     /**
@@ -756,87 +842,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const resourceSearchInput = document.getElementById('resourceSearch');
     const searchButton = document.querySelector('.search-bar button');
     const allSearchableListItems = document.querySelectorAll(
-        '.collapsible-content ul li, #officeEquipmentsList li' // GOLDEN RULE: NEW: Selects <li>s from both normal lists AND #officeEquipmentsList
+        '.collapsible-content ul li, #officeEquipmentsList li'
     );
 
     const filterResources = () => {
         console.log("[Search] Filtering resources...");
         const searchTerm = resourceSearchInput.value.toLowerCase();
-        let resultsFound = false; // Track if any results are found
+        let resultsFound = false;
+        
+        // Add "Searching..." indicator
+        const searchStatus = document.createElement('div');
+        searchStatus.className = 'search-status';
+        searchStatus.textContent = 'Searching...';
+        resourceSearchInput.parentElement.appendChild(searchStatus);
 
-        // GOLDEN RULE: Show/hide the clear icon based on search term presence
-        // clearSearchIcon is declared globally at the top now
-        if (clearSearchIcon) { // Ensure icon exists
-            if (searchTerm.length > 0) {
-                clearSearchIcon.style.display = 'block';
-            } else {
-                clearSearchIcon.style.display = 'none';
-            }
+        // Show/hide clear search icon
+        if (clearSearchIcon) {
+            clearSearchIcon.style.display = searchTerm.length > 0 ? 'block' : 'none';
         }
 
-        // Apply filter to all individual list items (show/hide)
+        // Filter list items
         allSearchableListItems.forEach(item => {
             const itemText = item.textContent.toLowerCase();
-            if (itemText.includes(searchTerm)) {
-                item.style.display = ''; // Show the item
-                resultsFound = true;
-            } else {
-                item.style.display = 'none'; // Hide the item
-            }
+            item.style.display = itemText.includes(searchTerm) ? '' : 'none';
+            if (itemText.includes(searchTerm)) resultsFound = true;
         });
         console.log(`[Search] Filtered by: "${searchTerm}". Results found: ${resultsFound}`);
 
-        // GOLDEN RULE: Auto-expand/collapse parent collapsible sections based on search results
-        // Iterate over all main collapsible sections and expand if they contain visible items
-        //document.querySelectorAll('.collapsible-section').forEach(section => {
-        document.querySelectorAll('.collapsible-section, .collapsible-sub-section').forEach(section => { // NEW: Selects both main and sub-sections for auto-expand
+        // Auto-expand/collapse collapsible sections
+        document.querySelectorAll('.collapsible-section, .collapsible-sub-section').forEach(section => {
             const sectionContent = section.querySelector('.collapsible-content');
             const sectionHeader = section.querySelector('.collapsible-header');
             
-            if (!sectionContent || !sectionHeader) return; // Skip if structure is incomplete
+            if (!sectionContent || !sectionHeader) return;
 
-            // Check if any child item of this section is visible (i.e., not display: none) AND search term is active
             const hasVisibleItemsInThisSection = Array.from(sectionContent.querySelectorAll('li')).some(li => li.style.display !== 'none');
 
-            // Only auto-expand if there are actual results and the section is currently collapsed
             if (hasVisibleItemsInThisSection && searchTerm.length > 0 && sectionHeader.classList.contains('collapsed')) {
-                console.log(`[Search Auto-Expand] Expanding main section: ${sectionHeader.querySelector('h4').textContent.trim()} due to search results.`);
+                console.log(`[Search Auto-Expand] Expanding section: ${sectionHeader.querySelector('h4').textContent.trim()}`);
                 sectionHeader.classList.remove('collapsed');
-                sectionContent.style.display = 'block'; // Snap open
+                sectionContent.style.display = 'block';
                 sectionContent.style.paddingTop = '10px';
                 sectionContent.style.paddingBottom = '10px';
-                sectionContent.style.overflow = 'visible'; // Allow native scroll if content overflows
-            } else if (!hasVisibleItemsInThisSection && searchTerm.length > 0 && sectionHeader && !sectionHeader.classList.contains('collapsed')) {
-                // If search term is active but no results in this section, collapse it if it's open
-                console.log(`[Search Auto-Collapse] Collapsing main section: ${sectionHeader.querySelector('h4').textContent.trim()} due to no results for active search.`);
+                sectionContent.style.overflow = 'visible';
+            } else if (!hasVisibleItemsInThisSection && searchTerm.length > 0 && !sectionHeader.classList.contains('collapsed')) {
+                console.log(`[Search Auto-Collapse] Collapsing section: ${sectionHeader.querySelector('h4').textContent.trim()}`);
                 sectionHeader.classList.add('collapsed');
-                sectionContent.style.display = 'none'; // Snap closed
+                sectionContent.style.display = 'none';
                 sectionContent.style.paddingTop = '0';
                 sectionContent.style.paddingBottom = '0';
-                sectionContent.style.overflow = 'hidden'; 
-            } else if (searchTerm.length === 0 && sectionHeader && !sectionHeader.classList.contains('collapsed')) {
-                // If search box is cleared (searchTerm is empty) and section is currently OPEN, collapse it to its initial state
-                console.log(`[Search Auto-Collapse] Collapsing section: ${sectionHeader.querySelector('h4').textContent.trim()} because search is cleared.`);
+                sectionContent.style.overflow = 'hidden';
+            } else if (searchTerm.length === 0 && !sectionHeader.classList.contains('collapsed')) {
+                console.log(`[Search Auto-Collapse] Collapsing section: ${sectionHeader.querySelector('h4').textContent.trim()}`);
                 sectionHeader.classList.add('collapsed');
-                sectionContent.style.display = 'none'; // Snap closed
+                sectionContent.style.display = 'none';
                 sectionContent.style.paddingTop = '0';
                 sectionContent.style.paddingBottom = '0';
-                sectionContent.style.overflow = 'hidden'; 
+                sectionContent.style.overflow = 'hidden';
             }
         });
+        
+        // Remove "Searching..." indicator after filtering
+        searchStatus.remove();
     };
 
-    if (resourceSearchInput) {
-        resourceSearchInput.addEventListener('keyup', filterResources);
-        searchButton.addEventListener('click', filterResources); // Listener for button click
+    // Apply debouncing to filterResources for keyup events
+    const debouncedFilterResources = debounce(filterResources, 300);
 
-        // GOLDEN RULE: Add click listener for the clear search icon
+    if (resourceSearchInput) {
+        resourceSearchInput.addEventListener('keyup', debouncedFilterResources);
+        searchButton.addEventListener('click', filterResources); // No debounce for click
+
         if (clearSearchIcon) {
             clearSearchIcon.addEventListener('click', () => {
                 console.log("[Search Clear] Clear icon clicked. Clearing search.");
-                resourceSearchInput.value = ''; // Clear the input field
-                filterResources(); // Re-run filter to show all items and collapse lists
-                resourceSearchInput.focus(); // Put focus back in the search box
+                resourceSearchInput.value = '';
+                filterResources(); // Run immediately to reset
+                resourceSearchInput.focus();
             });
         }
     }
@@ -1003,16 +1085,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (roomToUpdate) {
                 if (roomToUpdate.status === 'Available') {
                     roomToUpdate.status = 'Booked';
+                    //roomToUpdate.status = 'Locked';
                     // GOLDEN RULE: Corrected syntax for console.log with template literal
                     console.log(`[ActionBtn Click] Room ${roomToUpdate.name} is now Booked.`);
                     // GOLDEN RULE: Corrected syntax for alert with template literal
-                    alert(`${roomToUpdate.name} has been booked!`);
+                    //alert(`${roomToUpdate.name} has been booked!`);
+                    showNotification(`${roomToUpdate.name} has been booked!`, 'success');
                 } else if (roomToUpdate.status === 'Booked' || roomToUpdate.status === 'Occupied' || roomToUpdate.status === 'Locked') {
                     roomToUpdate.status = 'Available';
                     // GOLDEN RULE: Corrected syntax for console.log with template literal
                     console.log(`[ActionBtn Click] Room ${roomToUpdate.name} is now Available.`);
                     // GOLDEN RULE: Corrected syntax for alert with template literal
-                    alert(`${roomToUpdate.name} has been released!`);
+                    //alert(`${roomToUpdate.name} has been released!`);
+                    showNotification(`${roomToUpdate.name} has been released!`, 'success');
                 }
 
                 // --- SAVE DATA TO LOCAL STORAGE AFTER CHANGE ---
