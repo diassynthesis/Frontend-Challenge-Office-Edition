@@ -1,0 +1,1034 @@
+/* Basic Resets & Body Layout */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding-top: 105px; /* Pushes content down, matching header height */
+}
+
+/* Fix for overlapping content when using anchor links with a fixed header */
+#resources-section,
+#announcements-section,
+#quick-links-section,
+#colleagues-section, /* Added colleagues-section here as it's a top-level scroll target now */
+#map-view { /* GOLDEN RULE: NEW: Add map-view ID for return button */
+    scroll-margin-top: 110px; /* Adjusts scroll position to clear fixed header */
+}
+
+/* Header Styling */
+.main-header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    
+    /* Make header fixed */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header .logo h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.main-header .company-logo {
+    height: 30px;
+    width: auto;
+    margin-right: 15px;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.main-nav ul li {
+    margin-left: 25px;
+}
+
+.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+    color: #3498db;
+}
+
+.main-nav ul li a i {
+    margin-right: 8px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+}
+
+.user-profile .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #3498db;
+}
+
+.user-profile i {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+/* GOLDEN RULE: NEW: Styling for User Selection Dropdown */
+.user-profile {
+    /* Existing styles */
+    position: relative; /* Needed for positioning dropdown content */
+    display: flex; /* Ensure proper alignment of elements inside */
+    align-items: center;
+    color: white;
+    font-size: 14px;
+}
+
+.user-profile .profile-pic {
+    /* Existing styles */
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #3498db;
+}
+
+.user-dropdown-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-right: 5px; /* Space for the arrow */
+}
+
+#userNameDisplay {
+    margin-right: 5px; /* Space between name and arrow */
+    font-weight: bold;
+    color: white;
+}
+
+.user-select-dropdown {
+    position: absolute; /* Position over the content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Make it invisible but clickable */
+    cursor: pointer;
+    appearance: none; /* Remove default dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background: transparent;
+    z-index: 2; /* Ensure it's above other elements for clickability */
+}
+
+.dropdown-arrow {
+    margin-left: 0px; /* Adjust spacing to integrate with dropdown */
+    font-size: 1em;
+    color: white;
+    pointer-events: none; /* Let clicks pass through to the select */
+}
+
+/* Main Content Wrapper (Map + Sidebar) */
+.main-content-wrapper {
+    display: flex;
+    flex-grow: 1;
+}
+
+/* Map Container */
+.map-container {
+    flex: 3;
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-right: 1px solid #bdc3c7;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 80vh; /* Limits its maximum height to 80% of viewport height */
+    overflow-y: auto; /* IMPORTANT: Add this to ensure map can scroll internally if its content overflows this max-height */
+}
+
+.map-container h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.office-map-placeholder {
+    flex-grow: 1;
+    background-color: #ffffff; /* White background for the map area */
+    border: 1px dashed #95a5a6;
+    position: relative;
+    overflow: hidden; /* Keep for internal map content clipping */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #7f8c8d;
+    font-style: italic;
+    font-size: 1.2em;
+    min-height: 50vh; /* Adjusted for less empty space */
+}
+
+.room {
+    position: absolute;
+    background-color: #d1e0ed;
+    border: 1px solid #a8c4da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.room:hover {
+    background-color: #a8c4da;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Specific Room Sizing and Positioning */
+.hallway {
+    top: 10%;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background-color: #e6e9ed;
+    border: none;
+    font-style: italic;
+    color: #7f8c8d;
+    cursor: default;
+}
+.hallway:hover {
+    background-color: #e6e9ed;
+    transform: none;
+    box-shadow: none;
+}
+
+.office-a {
+    top: 35%;
+    left: 5%;
+    width: 40%;
+    height: 25%;
+}
+
+.meeting-rooms-zone {
+    top: 35%;
+    left: 55%;
+    width: 40%;
+    height: 25%;
+}
+
+.kitchen {
+    top: 65%;
+    left: 5%;
+    width: 25%;
+    height: 20%;
+}
+
+.office-b {
+    top: 65%;
+    left: 35%;
+    width: 30%;
+    height: 20%;
+}
+
+.reception {
+    top: 65%;
+    left: 70%;
+    width: 25%;
+    height: 20%;
+}
+
+
+/* Sidebar Styling */
+.sidebar {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+.sidebar h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.sidebar .search-bar {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.sidebar .search-bar input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.sidebar .search-bar button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .search-bar button:hover {
+    background-color: #2980b9;
+}
+
+.sidebar .search-bar button i {
+    margin: 0;
+}
+
+.search-status {
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  color: #666;
+  font-size: 12px;
+  z-index: 10;
+}
+
+/* Notification styles - UI Enhancements*/
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: #4caf50; /* Green for success */
+  color: white;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.notification.error {
+  background: #f44336; /* Red for error */
+}
+
+/* GOLDEN RULE: NEW: Style for the search clear button */
+.clear-search {
+    position: relative;
+    right: 35px; /* Adjust to position it inside the input field */
+    cursor: pointer;
+    color: #95a5a6;
+    font-size: 0.9em;
+    padding: 5px;
+    z-index: 1; /* Ensure it's above the input text */
+}
+
+/* GOLDEN RULE: Adjust search input padding to make space for the clear icon */
+.sidebar .search-bar input {
+    padding-right: 35px; /* Make space for the clear icon */
+}
+
+
+/* Styling for new content pages (Dashboard, Calendar) */
+.content-page {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.content-page .page-header h2 {
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.content-page .page-content p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #34495e;
+}
+
+.content-page .page-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    color: #555;
+}
+
+.content-page .page-content ul li {
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+/* GOLDEN RULE: NEW: Styling for Dashboard Widgets */
+.dashboard-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid columns */
+    gap: 20px; /* Space between widgets */
+    max-width: 1200px; /* Limit overall width */
+    margin: 30px auto; /* Center the grid */
+    padding: 10px;
+}
+
+.dashboard-widget {
+    background-color: #ffffff;
+    border: 1px solid #e0e6eb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: left; /* Align text within widgets */
+}
+
+.dashboard-widget h3 {
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-widget h3 i {
+    margin-right: 10px;
+    color: #3498db;
+    font-size: 1.1em;
+}
+
+.dashboard-widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-widget ul li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #ecf0f1;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.dashboard-widget ul li:last-child {
+    border-bottom: none;
+}
+
+.dashboard-widget p {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.dashboard-widget strong {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* GOLDEN RULE: NEW: Styling for Dashboard Section Headers (for Sticky Notes and future sections) */
+.dashboard-section-header {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto 10px auto;
+    text-align: left;
+    border-bottom: 2px solid #bdc3c7;
+    padding-bottom: 10px;
+}
+
+.dashboard-section-header h3 {
+    font-size: 1.6em;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-section-header h3 i {
+    margin-right: 10px;
+    color: #f1c40f; /* Star icon color */
+}
+
+/* GOLDEN RULE: NEW: Styling for News Ticker Animation */
+.ticker {
+    width: 100%;
+    overflow: hidden; /* Hides content outside the div */
+    background: #f0f0f0;
+    padding: 10px;
+    font-family: Arial, sans-serif; /* Use your main font-family */
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin: 20px auto; /* Space above/below, center */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Subtle inner shadow */
+    border-radius: 5px;
+}
+.ticker-text {
+    display: inline-block;
+    white-space: nowrap; /* Ensures text stays on one line */
+    animation: slide 15s linear infinite; /* Animation duration and type */
+}
+@keyframes slide {
+    0% { transform: translateX(100%); } /* Starts off-screen to the right */
+    100% { transform: translateX(-100%); } /* Moves to off-screen to the left */
+}
+
+
+/* GOLDEN RULE: NEW: Styling for Employee Recognition Board (Sticky Notes) */
+.sticky-note {
+    background: #fff3cd; /* Light yellow */
+    padding: 15px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transform: rotate(2deg);
+    font-family: 'Comic Sans MS', sans-serif;
+    max-width: 200px;
+    margin: 20px; /* Adjust margin as needed */
+    animation: wiggle 2s ease-in-out infinite;
+}
+@keyframes wiggle {
+    0%, 100% { transform: rotate(2deg); }
+    50% { transform: rotate(-2deg); }
+}
+.multiples {
+    display: flex;
+    gap: 2rem; /* Space between notes */
+    flex-wrap: wrap; /* Allow notes to wrap to next line */
+    justify-content: center; /* Center notes in the container */
+    margin: 20px auto; /* Center the group of notes */
+    max-width: 1200px; /* Match grid width */
+}
+
+/* GOLDEN RULE: NEW: Styling for Colleagues Directory Page */
+.colleagues-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid columns */
+    gap: 20px;
+    max-width: 1000px; /* Limit overall width */
+    margin: 30px auto;
+    padding: 10px;
+}
+
+.colleague-card {
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.colleague-card h3 {
+    color: #2c3e50;
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+}
+
+.colleague-card p {
+    font-size: 0.95em;
+    color: #555;
+    margin: 5px 0;
+}
+
+.colleague-card p strong {
+    color: #2c3e50;
+}
+
+/* GOLDEN RULE: NEW: Styling for the Calendar Display */
+#calendar-display {
+    width: 100%;
+    max-width: 900px; /* Limit calendar width */
+    background-color: #ffffff;
+    border: 1px solid #e0e6eb;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.calendar-header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-header-controls h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #2c3e50;
+}
+
+.calendar-header-controls button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #3498db;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.calendar-header-controls button:hover {
+    background-color: #f0f4f7;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #555;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    border: 1px solid #eee;
+    background-color: #fcfdfe;
+    min-height: 80px; /* Adjust height of day cells */
+    padding: 5px;
+    font-size: 0.9em;
+    text-align: right;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.calendar-day:hover {
+    background-color: #e9f0f5;
+}
+
+.calendar-day.current-month {
+    color: #333;
+}
+
+.calendar-day.other-month {
+    color: #bbb;
+    background-color: #f5f5f5;
+}
+
+.calendar-day-number {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.calendar-event {
+    background-color: #3498db;
+    color: white;
+    font-size: 0.75em;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-top: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* GOLDEN RULE: NEW: Style for the return-to-map button */
+.return-to-map-btn {
+    display: inline-block;
+    background-color: #3498db;
+    color: white !important; /* Ensure visibility */
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none !important; /* Remove underline */
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.return-to-map-btn:hover {
+    background-color: #2980b9;
+    text-decoration: none !important;
+}
+
+
+/* Styling for Collapsible Sections (Main) */
+.collapsible-section {
+    margin-bottom: 15px;
+    border: 1px solid #e0e6eb;
+    border-radius: 5px;
+    background-color: #ffffff;
+    overflow: hidden; /* Keep for smooth max-height transition */
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f0f4f7;
+    cursor: pointer;
+    border-bottom: 1px solid #e0e6eb;
+}
+
+.collapsible-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1em;
+}
+
+/* GOLDEN RULE: FIX CHEVRON ICON DIRECTION */
+/* This ensures standard UX: RIGHT when collapsed, DOWN when expanded. */
+.toggle-icon {
+    transition: transform 0.3s ease;
+    color: #34495e;
+    /* Default for fa-chevron-down (when list is expanded) is 0deg. */
+    /* We want it to point DOWN when expanded. So, 0deg is correct here. */
+    transform: rotate(0deg); /* This ensures it points DOWN when expanded */
+}
+
+/* GOLDEN RULE: Rotate icon when header is COLLAPSED (i.e., content is hidden) */
+/* It should point RIGHT when collapsed. */
+.collapsible-header.collapsed .toggle-icon {
+    transform: rotate(-90deg); /* This makes the fa-chevron-down point RIGHT when collapsed */
+}
+
+.collapsible-content {
+    padding: 0 15px; /* Initial padding when collapsed */
+    max-height: 0; /* Start hidden (collapsed) */
+    overflow: hidden; /* Hide overflow during transition */
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+    display: block; /* Allows max-height to work */
+}
+
+/* When header is NOT collapsed, content is active (shown) */
+.collapsible-header:not(.collapsed) + .collapsible-content {
+    max-height: 2000px; /* Use a consistently large max-height for all expanded collapsibles */
+    overflow-y: auto; /* IMPORTANT: Add scrollbar if content exceeds 2000px */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Styling for Collapsible Sub-Sections (Nested) */
+.collapsible-sub-section {
+    margin-top: 10px;
+    border: 1px dashed #e0e6eb;
+    border-radius: 3px;
+    background-color: #fcfdfe;
+}
+
+.collapsible-sub-section .collapsible-header {
+    padding: 8px 12px;
+    background-color: #f7f9fb;
+    border-bottom: 1px dashed #e0e6eb;
+}
+
+.collapsible-sub-section .collapsible-header h4 {
+    font-size: 0.95em;
+    color: #34495e;
+}
+
+.collapsible-sub-section .toggle-icon {
+    font-size: 0.9em;
+}
+
+.collapsible-sub-section .collapsible-content {
+    padding: 0 12px;
+}
+
+/* Ensure list items inside collapsible content are styled correctly */
+.collapsible-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.collapsible-content ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+}
+.collapsible-content ul li:last-child {
+    border-bottom: none;
+}
+
+
+/* Highlight for active/clicked room on the map */
+.room.active-room {
+    outline: 2px solid #3498db;
+    outline-offset: -2px;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+    background-color: #add8e6;
+}
+
+/* Styling for the NEW dynamic details panel in sidebar */
+.details-panel {
+    border-top: 1px solid #bdc3c7;
+    margin-top: 20px;
+    padding-top: 20px;
+    display: none;
+    position: relative;
+}
+
+.details-panel h4 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.details-panel ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.details-panel ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details-panel ul li strong {
+    color: #2c3e50;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+/* Specific styling for 'booked' and 'available' status within the details panel */
+.details-panel ul li span.booked {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.details-panel ul li span.available {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* GOLDEN RULE: NEW: Style for 'locked' status in details panel list */
+.details-panel ul li span.locked {
+    color: #e28743; /* Match the orange/yellow from map-room-locked */
+    font-weight: bold;
+}
+
+/* Styling for the action button */
+#actionBtn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+#actionBtn:hover {
+    background-color: #2980b9;
+}
+
+/* Ensure booked list items in the panel are visibly not clickable */
+.details-panel ul li.booked {
+    background-color: #fdd;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.details-panel ul li.booked::before {
+    content: '\f023';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 8px;
+    color: #e74c3c;
+}
+
+
+/* Visual for Occupied/Booked rooms on the map */
+.room.map-room-occupied {
+    background-color: #f7cac8 !important;
+    border: 1px solid #e74c3c !important;
+    color: #e74c3c !important;
+}
+.room.map-room-occupied:hover {
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* GOLDEN RULE: NEW: Visual for Locked rooms on the map */
+.room.map-room-locked {
+    background-color: #d1f7d1 !important; /* Light Green */
+    border: 1px solid #27ae60 !important; /* Green border */
+    color: #27ae60 !important; /* Corrected to Green text */
+    cursor: pointer; /* Now clickable to release */
+}
+.room.map-room-locked:hover {
+    transform: scale(1.02); /* Maintain hover effect */
+    box-shadow: 0 0 10px rgba(0,0,0,0.2); /* Maintain hover effect */
+    cursor: pointer;
+}
+
+
+/* Footer Styling */
+.main-footer {
+    background-color: #34495e;
+    color: #bdc3c7;
+    text-align: center;
+    padding: 5px 20px;
+    font-size: 0.8em;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.main-footer .footer-sections {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #4a6681;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+}
+
+.main-footer .footer-section p a {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.main-footer .footer-section p a:hover {
+    color: #5bb3f9;
+}
+
+.main-footer .footer-section h4 {
+    color: #ecf0f1;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.main-footer .footer-section p,
+.main-footer .footer-section ul {
+    font-size: 0.9em;
+    color: #bdc3c7;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-footer .footer-section ul li a {
+    color: #bdc3c7;
+    text-decoration: none;
+    padding: 3px 0;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.main-footer .footer-section ul li a:hover {
+    color: #3498db;
+}
+
+.main-footer .copyright {
+    font-size: 0.8em;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+/* Responsive adjustments (basic) */
+@media (max-width: 768px) {
+    .main-content-wrapper {
+        flex-direction: column;
+    }
+
+    .map-container,
+    .sidebar {
+        flex: none;
+        width: 100%;
+        height: auto;
+        min-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid #bdc3c7;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .main-nav ul {
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .main-nav ul li {
+        margin: 5px 10px 5px 0;
+    }
+
+    .user-profile {
+        margin-top: 10px;
+    }
+
+    .main-footer .footer-sections {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main-footer .footer-section {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+  .main-content-wrapper {
+    flex-direction: column; /* Retained for clarity, already set at 768px */
+  }
+  .sidebar {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+  .map-container {
+    width: 100%;
+/*    min-height: 40vh; /* Adjusted for smaller screens */
+  }
+}
